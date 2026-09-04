@@ -1,0 +1,38 @@
+<div class="service-card-new">
+  <div class="service-img-new">
+    <div class="service-img-placeholder"></div>
+    @if (destacado()) {
+      <span class="badge-destacado">Destacado</span>
+    }
+  </div>
+  <div class="service-body-new">
+    <div class="service-header-row">
+      <span class="service-category-badge">{{ categoriaNombre() }}</span>
+      <span class="service-rating-new">
+        ★ {{ servicio().rating }}
+        <span class="rating-count">({{ servicio().reviews }})</span>
+      </span>
+    </div>
+    <h3>{{ servicio().nombre }}</h3>
+    <p class="service-desc">{{ servicio().descripcion }}</p>
+    <div class="service-meta">
+      <span class="service-worker-new">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        {{ trabajadorNombre() }}
+      </span>
+      <span class="service-location">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        {{ ubicacion() }}
+      </span>
+    </div>
+    <div class="service-footer-new">
+      <div class="service-price-new">
+        <span class="price-value">{{ servicio().precioMin | price }}</span>
+        <span class="price-type">{{ servicio().tipoPrecio }}</span>
+      </div>
+      <button class="btn btn-primary btn-sm" (click)="contactar.emit(servicio())">
+        Contactar
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,33 @@
+<div class="page-title-bar">
+  <div class="container">
+    <h1>
+      Explora Servicios por <span class="accent">Categoría</span>
+    </h1>
+    <p>
+      Encuentra el profesional perfecto para tu proyecto navegando por nuestras
+      categorías especializadas
+    </p>
+  </div>
+</div>
+
+<section class="section" style="padding-top: 20px">
+  <div class="container">
+    @if (categorias.isLoading()) {
+      <div class="grid-status" aria-label="Cargando categorías">Cargando…</div>
+    } @else if (categorias.error()) {
+      <div class="grid-status grid-error">
+        No pudimos cargar las categorías. Inténtalo de nuevo más tarde.
+      </div>
+    } @else if ((categorias.value() ?? []).length === 0) {
+      <div class="grid-status">
+        No hay categorías disponibles por el momento.
+      </div>
+    } @else {
+      <div class="categories-grid categories-grid-full">
+        @for (categoria of categorias.value() ?? []; track categoria.id) {
+          <sl-category-card [categoria]="categoria" [full]="true" />
+        }
+      </div>
+    }
+  </div>
+</section>

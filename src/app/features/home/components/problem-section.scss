@@ -1,0 +1,24 @@
+@use '../../../../styles/tokens' as *;
+
+:host {
+  display: block;
+}
+
+.problem-content {
+  max-width: 850px;
+  margin: 0 auto;
+  text-align: center;
+
+  p {
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    line-height: 1.85;
+  }
+
+  strong.accent-text {
+    color: var(--accent);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+}

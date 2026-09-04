@@ -1,0 +1,39 @@
+@use '../../../../styles/tokens' as *;
+
+:host {
+  display: block;
+}
+
+.cta-section {
+  background: var(--gradient-green);
+  text-align: center;
+  padding: 70px 24px;
+
+  h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 14px;
+    color: #fff;
+  }
+
+  p {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.85);
+    margin-bottom: 30px;
+    max-width: 520px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .btn {
+    background: #fff;
+    color: var(--accent);
+    font-weight: 700;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.9);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    }
+  }
+}

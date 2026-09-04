@@ -1,0 +1,29 @@
+<header class="header">
+  <div class="container">
+    <sl-brand-logo routerLink="/" />
+    <nav
+      class="nav-links"
+      [class.open]="menuOpen()"
+      (click)="closeMenu()"
+      aria-label="Navegación principal"
+    >
+      @for (item of navItems; track item.path) {
+        <a
+          [routerLink]="item.path"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: item.path === '/' }"
+        >
+          {{ item.label }}
+        </a>
+      }
+    </nav>
+    <button
+      class="menu-toggle"
+      [class.open]="menuOpen()"
+      (click)="toggleMenu()"
+      aria-label="Abrir menú"
+    >
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>

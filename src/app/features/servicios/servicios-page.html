@@ -1,0 +1,86 @@
+<div class="services-header">
+  <div class="container">
+    <div class="breadcrumb">
+      <a routerLink="/">Inicio</a>
+      <span>›</span>
+      <a routerLink="/categorias">Categorías</a>
+      <span>›</span>
+      <span>{{ selectedCategoria()?.nombre ?? 'Todos los Servicios' }}</span>
+    </div>
+    <div class="services-title-row">
+      <div class="services-title-icon" [innerHTML]="iconoSeleccionado() | safeHtml"></div>
+      <div class="services-title-content">
+        <h1>{{ tituloPagina() }}</h1>
+        <p class="services-subtitle">
+          {{ subtituloPagina() }}
+        </p>
+      </div>
+    </div>
+    <p class="services-count">
+      <span class="count-number">{{ total() }}</span> servicios disponibles
+    </p>
+  </div>
+</div>
+
+<section class="section" style="padding-top: 10px; padding-bottom: 40px">
+  <div class="container">
+    <h2 class="section-title-left">Servicios Destacados</h2>
+
+    @if (isLoading()) {
+      <div class="grid-status">Cargando servicios…</div>
+    } @else if (hasError()) {
+      <div class="grid-status grid-error">
+        No pudimos cargar los servicios. Inténtalo de nuevo más tarde.
+      </div>
+    } @else if (destacados().length === 0) {
+      <div class="grid-empty">
+        <p>No se encontraron servicios en esta categoría.</p>
+        <a routerLink="/categorias" class="btn btn-primary">Ver Otras Categorías</a>
+      </div>
+    } @else {
+      <div class="services-grid services-grid-2">
+        @for (item of destacados(); track item.servicio.id) {
+          <sl-service-card
+            [servicio]="item.servicio"
+            [trabajadorNombre]="item.trabajadorNombre"
+            [ubicacion]="item.ubicacion"
+            [categoriaNombre]="item.categoriaNombre"
+            [destacado]="true"
+            (contactar)="onContactar($event)"
+          />
+        }
+      </div>
+    }
+  </div>
+</section>
+
+<section class="section" style="padding-top: 20px; background: var(--bg-primary)">
+  <div class="container">
+    <h2 class="section-title-left">Todos los Servicios</h2>
+
+    @if (isLoading()) {
+      <div class="grid-status">Cargando servicios…</div>
+    } @else if (hasError()) {
+      <div class="grid-status grid-error">
+        No pudimos cargar los servicios. Inténtalo de nuevo más tarde.
+      </div>
+    } @else if (enriquecidos().length === 0) {
+      <div class="grid-empty">
+        <p>No se encontraron servicios en esta categoría.</p>
+        <a routerLink="/categorias" class="btn btn-primary">Ver Otras Categorías</a>
+      </div>
+    } @else {
+      <div class="services-grid services-grid-2">
+        @for (item of enriquecidos(); track item.servicio.id) {
+          <sl-service-card
+            [servicio]="item.servicio"
+            [trabajadorNombre]="item.trabajadorNombre"
+            [ubicacion]="item.ubicacion"
+            [categoriaNombre]="item.categoriaNombre"
+            (contactar)="onContactar($event)"
+          />
+        }
+      </div>
+    }
+  </div>
+</section>

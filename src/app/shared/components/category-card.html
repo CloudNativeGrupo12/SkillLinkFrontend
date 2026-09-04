@@ -1,0 +1,10 @@
+<a
+  class="category-card"
+  [class.category-card-full]="full()"
+  [routerLink]="['/servicios']"
+  [queryParams]="{ categoria: categoria().id }"
+>
+  <div class="cat-icon" [innerHTML]="categoria().icono | safeHtml"></div>
+  <h4>{{ categoria().nombre }}</h4>
+  <p class="cat-count">{{ categoria().servicios }} servicios</p>
+</a>

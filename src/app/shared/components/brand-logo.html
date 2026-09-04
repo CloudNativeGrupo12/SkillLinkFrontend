@@ -1,0 +1,11 @@
+@if (routerLink()) {
+  <a class="logo" [routerLink]="routerLink()">
+    <div class="logo-icon">🔗</div>
+    <span>SkillLink</span>
+  </a>
+} @else {
+  <div class="logo">
+    <div class="logo-icon">🔗</div>
+    <span>SkillLink</span>
+  </div>
+}

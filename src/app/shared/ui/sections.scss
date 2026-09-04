@@ -1,0 +1,43 @@
+@use '../../../styles/tokens' as *;
+
+.section {
+  padding: $section-padding-y 0;
+
+  @include respond('tablet') {
+    padding: $section-padding-y-mobile 0;
+  }
+}
+
+.section-title {
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 48px;
+  letter-spacing: -0.02em;
+
+  @include respond('tablet') {
+    font-size: 1.6rem;
+    margin-bottom: 32px;
+  }
+}
+
+.section-title-left {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+.btn-center {
+  display: flex;
+  justify-content: center;
+  margin-top: 36px;
+}
+
+.problem-section {
+  background: var(--bg-secondary);
+}
+
+.accent {
+  color: var(--accent);
+}

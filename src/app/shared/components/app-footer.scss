@@ -1,0 +1,122 @@
+@use '../../../styles/tokens' as *;
+
+:host {
+  display: block;
+}
+
+.footer {
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border);
+  padding: 48px 0 0;
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1.2fr;
+    gap: 40px;
+    padding-bottom: 36px;
+  }
+
+  .footer-brand .logo {
+    margin-bottom: 12px;
+  }
+
+  .footer-brand p {
+    color: var(--text-secondary);
+    font-size: 0.88rem;
+    line-height: 1.7;
+    max-width: 300px;
+  }
+
+  .footer-heading {
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-bottom: 18px;
+    color: var(--text-primary);
+  }
+
+  .footer-subscribe {
+    .footer-subscribe-text {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      line-height: 1.7;
+      margin-bottom: 14px;
+    }
+
+    .footer-feedback {
+      color: var(--accent);
+      font-size: 0.85rem;
+      margin-bottom: 10px;
+    }
+
+    .subscribe-form {
+      display: flex;
+      gap: 10px;
+
+      input {
+        flex: 1;
+        padding: 10px 16px;
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        color: var(--text-primary);
+        font-size: 0.88rem;
+
+        &::placeholder {
+          color: var(--text-muted);
+        }
+
+        &:focus {
+          border-color: var(--accent);
+        }
+      }
+
+      .btn {
+        padding: 10px 20px;
+      }
+    }
+  }
+
+  .footer-socials {
+    display: flex;
+    gap: 12px;
+    margin-top: 0;
+
+    a {
+      width: 38px;
+      height: 38px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-secondary);
+      transition: all var(--transition);
+
+      svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      &:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+        transform: translateY(-2px);
+      }
+    }
+  }
+
+  .footer-bottom {
+    border-top: 1px solid var(--border);
+    padding: 20px 0;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.82rem;
+  }
+}
+
+@include respond('tablet') {
+  .footer .footer-grid {
+    grid-template-columns: 1fr;
+  }
+}

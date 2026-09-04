@@ -1,0 +1,14 @@
+<section class="section">
+  <div class="container">
+    <h2 class="section-title">Nuestra Solución</h2>
+    <div class="solution-grid">
+      @for (solucion of soluciones; track solucion.titulo) {
+        <div class="solution-card">
+          <div class="card-icon" [innerHTML]="solucion.icono | safeHtml"></div>
+          <h3>{{ solucion.titulo }}</h3>
+          <p>{{ solucion.descripcion }}</p>
+        </div>
+      }
+    </div>
+  </div>
+</section>

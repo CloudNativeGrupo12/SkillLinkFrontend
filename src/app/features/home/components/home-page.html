@@ -1,0 +1,12 @@
+<sl-hero-section />
+<sl-problem-section />
+<sl-solution-section />
+<sl-featured-professionals-section
+  [profesionales]="profesionales.value() ?? []"
+  [loading]="profesionales.isLoading()"
+/>
+<sl-top-categories-section
+  [categorias]="topCategorias()"
+  [loading]="categorias.isLoading()"
+/>
+<sl-cta-section />

@@ -1,0 +1,23 @@
+@use '../../../../styles/tokens' as *;
+
+:host {
+  display: block;
+}
+
+.professionals-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+
+  @include respond('tablet') {
+    grid-template-columns: 1fr;
+  }
+}
+
+.grid-loading,
+.grid-empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-secondary);
+  font-size: 1rem;
+}

@@ -1,0 +1,22 @@
+<section class="section" style="background: var(--bg-secondary)">
+  <div class="container">
+    <h2 class="section-title">Profesionales Destacados</h2>
+
+    @if (loading()) {
+      <div class="grid-loading" aria-label="Cargando profesionales">Cargando…</div>
+    } @else if (profesionales().length === 0) {
+      <div class="grid-empty">
+        <p>No hay profesionales destacados disponibles.</p>
+      </div>
+    } @else {
+      <div class="professionals-grid">
+        @for (profesional of profesionales(); track profesional.id) {
+          <sl-professional-card
+            [profesional]="profesional"
+            [premium]="esPremium(profesional)"
+          />
+        }
+      </div>
+    }
+  </div>
+</section>

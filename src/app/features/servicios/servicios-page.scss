@@ -1,0 +1,119 @@
+@use '../../../styles/tokens' as *;
+
+:host {
+  display: block;
+}
+
+.services-header {
+  padding-top: calc(var(--header-height) + 40px);
+  padding-bottom: 20px;
+  text-align: center;
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin-bottom: 16px;
+
+  a {
+    color: var(--accent);
+  }
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+
+  @include respond('desktop') {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include respond('tablet') {
+    grid-template-columns: 1fr;
+  }
+}
+
+.services-grid-2 {
+  grid-template-columns: repeat(2, 1fr);
+
+  @include respond('tablet') {
+    grid-template-columns: 1fr;
+  }
+}
+
+.section-title-left {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+.services-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 12px;
+
+  @include respond('tablet') {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+}
+
+.services-title-icon {
+  width: 52px;
+  height: 52px;
+  min-width: 52px;
+  background: var(--accent-light);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+
+  ::ng-deep svg {
+    width: 24px;
+    height: 24px;
+    stroke: var(--accent);
+  }
+}
+
+.services-title-content h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.services-subtitle {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+}
+
+.services-count {
+  color: var(--accent);
+  font-size: 0.9rem;
+  font-weight: 500;
+
+  .count-number {
+    font-weight: 700;
+  }
+}
+
+.grid-status,
+.grid-empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-secondary);
+  font-size: 1rem;
+}
+
+.grid-error {
+  color: var(--danger);
+}

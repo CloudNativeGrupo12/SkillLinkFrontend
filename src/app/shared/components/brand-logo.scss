@@ -1,0 +1,22 @@
+@use '../../../styles/tokens' as *;
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text-primary);
+
+  .logo-icon {
+    width: 38px;
+    height: 38px;
+    background: var(--accent);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    color: #fff;
+  }
+}

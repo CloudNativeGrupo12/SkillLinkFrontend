@@ -1,0 +1,25 @@
+<section class="section">
+  <div class="container">
+    <h2 class="section-title">Categorías Más Solicitadas</h2>
+
+    @if (loading()) {
+      <div class="grid-loading" aria-label="Cargando categorías">Cargando…</div>
+    } @else if (categorias().length === 0) {
+      <div class="grid-empty">
+        <p>No hay categorías disponibles.</p>
+      </div>
+    } @else {
+      <div class="categories-grid">
+        @for (categoria of categorias(); track categoria.id) {
+          <sl-category-card [categoria]="categoria" />
+        }
+      </div>
+    }
+
+    <div class="btn-center">
+      <a routerLink="/categorias" class="btn btn-secondary">
+        Ver Todas las Categorías
+      </a>
+    </div>
+  </div>
+</section>

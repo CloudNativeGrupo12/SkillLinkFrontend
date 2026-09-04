@@ -1,0 +1,112 @@
+@if (publicado()) {
+  <section class="section">
+    <div class="container">
+      <div class="alert-success">
+        <h2>¡Servicio publicado con éxito!</h2>
+        <p>
+          Tu servicio ya está disponible en el catálogo. Puedes publicar otro o verlo en tu perfil.
+        </p>
+        <a routerLink="/mi-perfil" class="btn btn-primary">Ver Mi Perfil</a>
+      </div>
+    </div>
+  </section>
+}
+
+<form [formRoot]="servicioForm" (ngSubmit)="publicar()" class="publish-form">
+  <div class="container publish-container">
+    <div class="publish-header">
+      <h1>Publicar un Servicio</h1>
+      <p>Completa los datos para ofrecer tu servicio a la comunidad.</p>
+    </div>
+
+    @if (error()) {
+      <div class="alert-error">{{ error() }}</div>
+    }
+
+    @if (!publicado()) {
+      <div class="publish-card">
+        @if (categorias.isLoading()) {
+          <div class="form-status">Cargando categorías…</div>
+        }
+
+        @if (mostrarErrores()) {
+          <div class="alert-error">Revisa los campos marcados e inténtalo de nuevo.</div>
+        }
+
+        <div class="form-group">
+          <label for="titulo">Título del servicio *</label>
+          <input
+            id="titulo"
+            type="text"
+            [formField]="servicioForm.titulo"
+            placeholder="Ej: Entrenamiento personalizado a domicilio"
+          />
+          @if (mostrarErrores() && servicioForm.titulo().invalid()) {
+            <p class="error-text">El título del servicio es obligatorio.</p>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="categoria">Categoría *</label>
+          <select id="categoria" [formField]="servicioForm.categoriaId">
+            <option value="">Selecciona una categoría</option>
+            @for (cat of categorias.value(); track cat.id) {
+              <option [value]="cat.id">{{ cat.nombre }}</option>
+            }
+          </select>
+          @if (mostrarErrores() && servicioForm.categoriaId().invalid()) {
+            <p class="error-text">Selecciona una categoría.</p>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="precio">Precio (CLP) *</label>
+          <input
+            id="precio"
+            type="number"
+            [formField]="servicioForm.precio"
+            placeholder="Ej: 25000"
+          />
+          @if (mostrarErrores() && servicioForm.precio().invalid()) {
+            <p class="error-text">Indica un precio.</p>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="descripcion">Descripción del servicio *</label>
+          <textarea
+            id="descripcion"
+            [formField]="servicioForm.descripcion"
+            rows="5"
+            placeholder="Describe qué incluye tu servicio, duración, materiales, etc."
+          ></textarea>
+          <div class="char-counter">
+            {{ descripcionLargo() }}/500
+          </div>
+          @if (mostrarErrores() && servicioForm.descripcion().invalid()) {
+            <p class="error-text">La descripción es obligatoria (máx. 500 caracteres).</p>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="nombre">Tu nombre *</label>
+          <input
+            id="nombre"
+            type="text"
+            [formField]="servicioForm.nombre"
+            placeholder="Ej: Carlos Mendoza"
+          />
+          @if (mostrarErrores() && servicioForm.nombre().invalid()) {
+            <p class="error-text">Tu nombre es obligatorio.</p>
+          }
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary btn-lg" [disabled]="enviando()">
+            {{ enviando() ? 'Publicando…' : 'Publicar Servicio' }}
+          </button>
+        </div>
+      </div>
+    }
+  </div>
+</form>
