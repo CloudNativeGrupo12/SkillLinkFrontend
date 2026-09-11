@@ -7,6 +7,8 @@ import { CategoriasApi } from '../../core/api/categorias.api';
 import { ServiciosApi } from '../../core/api/servicios.api';
 import { Categoria } from '../../core/models/categoria.model';
 import { CreateServicioDto } from '../../core/models/servicio.model';
+import { AuthService } from '../../core/auth/auth.service';
+import { describirError, ErrorApi } from '../../core/http/api-error';
 
 interface PublicarServicioModel {
   titulo: string;
@@ -24,6 +26,7 @@ interface PublicarServicioModel {
 export class PublicarServicioPageComponent {
   private readonly categoriasApi = inject(CategoriasApi);
   private readonly serviciosApi = inject(ServiciosApi);
+  protected readonly auth = inject(AuthService);
 
   protected readonly categorias = rxResource<Categoria[], unknown>({
     stream: () => this.categoriasApi.getCategorias(),
@@ -55,6 +58,7 @@ export class PublicarServicioPageComponent {
   protected readonly publicado = signal(false);
   protected readonly submitIntentado = signal(false);
   protected readonly error = signal<string | null>(null);
+  protected readonly errorApi = signal<ErrorApi | null>(null);
 
   protected readonly mostrarErrores = computed(
     () => this.submitIntentado() && this.servicioForm().invalid(),
@@ -63,6 +67,7 @@ export class PublicarServicioPageComponent {
   protected async publicar(): Promise<void> {
     this.publicado.set(false);
     this.error.set(null);
+    this.errorApi.set(null);
     this.submitIntentado.set(true);
 
     if (this.servicioForm().invalid()) {
@@ -89,8 +94,10 @@ export class PublicarServicioPageComponent {
         precio: 0,
         nombre: '',
       });
-    } catch {
-      this.error.set('No pudimos publicar el servicio. Inténtalo de nuevo.');
+    } catch (e) {
+      const info = describirError(e);
+      this.errorApi.set(info);
+      this.error.set(`${info.titulo} (HTTP ${info.status}). ${info.detalle}`);
     } finally {
       this.enviando.set(false);
     }

@@ -7,6 +7,7 @@ import { CategoriasApi } from '../../core/api/categorias.api';
 import { ServiciosApi } from '../../core/api/servicios.api';
 import { Categoria } from '../../core/models/categoria.model';
 import { Servicio, CreateServicioDto } from '../../core/models/servicio.model';
+import { APP_CONFIG, DEFAULT_APP_CONFIG } from '../../core/config/app-config';
 
 const categorias: Categoria[] = [
   { id: 1, nombre: 'Fitness', descripcion: 'Entrenadores', icono: '<svg></svg>', servicios: 45 },
@@ -56,6 +57,7 @@ describe('PublicarServicioPageComponent', () => {
       imports: [PublicarServicioPageComponent],
       providers: [
         provideRouter([]),
+        { provide: APP_CONFIG, useValue: DEFAULT_APP_CONFIG },
         { provide: CategoriasApi, useClass: CategoriasApiStub },
         { provide: ServiciosApi, useClass: ServiciosApiStub },
       ],

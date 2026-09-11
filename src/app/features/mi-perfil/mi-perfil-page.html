@@ -4,7 +4,12 @@
     @if (isLoading()) {
       <div class="grid-status">Cargando perfil…</div>
     } @else if (hasError()) {
-      <div class="grid-status grid-error">No pudimos cargar el perfil. Inténtalo más tarde.</div>
+      <div class="grid-status grid-error">
+        <strong>{{ errorApi()?.titulo }}</strong> (HTTP {{ errorApi()?.status }}) — {{ errorApi()?.detalle }}
+        @if (errorApi()?.tipo === 'no-autenticado' && auth.enabled) {
+          <div><button type="button" class="btn btn-primary btn-sm" (click)="auth.login()">Iniciar sesión</button></div>
+        }
+      </div>
     } @else if (noEncontrado()) {
       <div class="grid-status grid-error">No se encontró el perfil solicitado.</div>
     } @else {

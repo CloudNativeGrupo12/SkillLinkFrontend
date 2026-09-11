@@ -1,9 +1,16 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
+import {
+  ApplicationConfig,
+  inject,
+  provideAppInitializer,
+  provideBrowserGlobalErrorListeners,
+} from '@angular/core';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
-import { provideHttpClient, withFetch } from '@angular/common/http';
+import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 
 import { routes } from './app.routes';
-import { environment } from '../environments/environment';
+import { APP_CONFIG, AppConfig } from './core/config/app-config';
+import { AuthService } from './core/auth/auth.service';
+import { authInterceptor } from './core/auth/auth.interceptor';
 
 import {
   CategoriasApi,
@@ -23,30 +30,21 @@ import { ProfesionalesApiReal } from './core/api/profesionales-api.real';
 import { PerfilesApiReal } from './core/api/perfiles-api.real';
 import { SuscripcionesApiReal } from './core/api/suscripciones-api.real';
 
-export const appConfig: ApplicationConfig = {
-  providers: [
-    provideBrowserGlobalErrorListeners(),
-    provideRouter(routes, withComponentInputBinding()),
-    provideHttpClient(withFetch()),
-    {
-      provide: CategoriasApi,
-      useClass: environment.useMocks ? CategoriasApiMock : CategoriasApiReal,
-    },
-    {
-      provide: ServiciosApi,
-      useClass: environment.useMocks ? ServiciosApiMock : ServiciosApiReal,
-    },
-    {
-      provide: ProfesionalesApi,
-      useClass: environment.useMocks ? ProfesionalesApiMock : ProfesionalesApiReal,
-    },
-    {
-      provide: PerfilesApi,
-      useClass: environment.useMocks ? PerfilesApiMock : PerfilesApiReal,
-    },
-    {
-      provide: SuscripcionesApi,
-      useClass: environment.useMocks ? SuscripcionesApiMock : SuscripcionesApiReal,
-    },
-  ],
-};
+/** Los mocks solo se usan en desarrollo cuando config.json/environment lo indican. */
+export function buildAppConfig(config: AppConfig): ApplicationConfig {
+  const useMocks = !!config.useMocks;
+  return {
+    providers: [
+      provideBrowserGlobalErrorListeners(),
+      provideRouter(routes, withComponentInputBinding()),
+      provideHttpClient(withFetch(), withInterceptors([authInterceptor])),
+      { provide: APP_CONFIG, useValue: config },
+      provideAppInitializer(() => inject(AuthService).init()),
+      { provide: CategoriasApi, useClass: useMocks ? CategoriasApiMock : CategoriasApiReal },
+      { provide: ServiciosApi, useClass: useMocks ? ServiciosApiMock : ServiciosApiReal },
+      { provide: ProfesionalesApi, useClass: useMocks ? ProfesionalesApiMock : ProfesionalesApiReal },
+      { provide: PerfilesApi, useClass: useMocks ? PerfilesApiMock : PerfilesApiReal },
+      { provide: SuscripcionesApi, useClass: useMocks ? SuscripcionesApiMock : SuscripcionesApiReal },
+    ],
+  };
+}

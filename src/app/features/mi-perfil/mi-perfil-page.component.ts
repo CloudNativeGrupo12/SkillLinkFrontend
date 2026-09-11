@@ -12,6 +12,8 @@ import { Servicio } from '../../core/models/servicio.model';
 import { Categoria } from '../../core/models/categoria.model';
 import { ServiceCardComponent } from '../../shared/components/service-card.component';
 import { PricePipe } from '../../shared/pipes/price.pipe';
+import { AuthService } from '../../core/auth/auth.service';
+import { describirError, ErrorApi } from '../../core/http/api-error';
 
 type VistaPerfil = 'trabajador' | 'cliente';
 
@@ -25,6 +27,7 @@ export class MiPerfilPageComponent {
   private readonly perfilesApi = inject(PerfilesApi);
   private readonly serviciosApi = inject(ServiciosApi);
   private readonly categoriasApi = inject(CategoriasApi);
+  protected readonly auth = inject(AuthService);
 
   protected readonly vista = signal<VistaPerfil>('trabajador');
 
@@ -33,6 +36,7 @@ export class MiPerfilPageComponent {
     transform: (v: unknown) => (v ? Number(v) : undefined),
   });
 
+  /** Solo se consulta la identidad cuando hay sesion (sin IDaaS configurado, se consulta igual para mostrar el 401). */
   private readonly currentUser = rxResource<CurrentUser, unknown>({
     stream: () => this.perfilesApi.getCurrentUser(),
   });
@@ -82,15 +86,19 @@ export class MiPerfilPageComponent {
       this.currentUser.isLoading(),
   );
 
-  protected readonly hasError = computed(
-    () =>
-      !!this.profesional.error() ||
-      !!this.perfil.error() ||
-      !!this.certificaciones.error() ||
-      !!this.userServicios.error() ||
-      !!this.categorias.error() ||
-      !!this.currentUser.error(),
-  );
+  /** Primer error de API relevante, traducido a un estado comunicable (401/403/404/red). */
+  protected readonly errorApi = computed<ErrorApi | null>(() => {
+    const err =
+      this.profesional.error() ??
+      this.perfil.error() ??
+      this.certificaciones.error() ??
+      this.userServicios.error() ??
+      this.categorias.error() ??
+      this.currentUser.error();
+    return err ? describirError(err) : null;
+  });
+
+  protected readonly hasError = computed(() => this.errorApi() !== null);
 
   protected readonly noEncontrado = computed(() => !this.profesional.value());
   protected readonly prof = computed(() => this.profesional.value());

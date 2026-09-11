@@ -1,4 +1,6 @@
 export const environment = {
-  useMocks: true,
   production: false,
+  useMocks: false,
+  configUrl: 'config.json',
+  apiBaseUrl: 'http://localhost:8080',
 };

@@ -1,0 +1,143 @@
+<div class="page-title-bar">
+  <div class="container">
+    <h1>Evidencia de <span class="accent">Seguridad</span></h1>
+    <p>
+      Provoca, observa y explica la matriz 200 / 401 / 403 contra la API real. El Access Token nunca se
+      muestra completo: solo sus claims relevantes.
+    </p>
+  </div>
+</div>
+
+<section class="section" style="padding-top: 20px">
+  <div class="container security-layout">
+    <div class="security-card">
+      <h2 class="card-title">Arquitectura en uso</h2>
+      <dl class="config-list">
+        <dt>API (API_BASE_URL)</dt>
+        <dd><code>{{ config.apiBaseUrl }}</code></dd>
+        <dt>IDaaS</dt>
+        <dd>
+          @if (auth.enabled) {
+            Microsoft Entra ID · tenant <code>{{ config.auth.tenantId }}</code>
+          } @else {
+            <span class="muted">No configurado (config.json sin clientId/tenantId)</span>
+          }
+        </dd>
+        <dt>Scope solicitado</dt>
+        <dd><code>{{ config.auth.apiScope || '—' }}</code></dd>
+        <dt>Sesión</dt>
+        <dd>
+          @if (auth.isAuthenticated()) {
+            <strong>{{ auth.displayName() }}</strong> <span class="muted">({{ auth.username() }})</span>
+            <button type="button" class="btn btn-outline btn-sm" (click)="auth.logout()">Cerrar sesión</button>
+          } @else if (auth.enabled) {
+            <span class="muted">No autenticado</span>
+            <button type="button" class="btn btn-primary btn-sm" (click)="auth.login()">
+              Iniciar sesión (Authorization Code + PKCE)
+            </button>
+          } @else {
+            <span class="muted">Sin IDaaS solo se pueden probar los escenarios 200 público y 401.</span>
+          }
+        </dd>
+      </dl>
+
+      <div class="claims-block">
+        <div class="claims-header">
+          <h3 class="card-title">Claims del Access Token</h3>
+          <button
+            type="button"
+            class="btn btn-outline btn-sm"
+            [disabled]="!auth.isAuthenticated()"
+            (click)="inspeccionarToken()"
+          >
+            Inspeccionar (sin exponer el token)
+          </button>
+        </div>
+        @if (claimsError()) {
+          <p class="error-text">{{ claimsError() }}</p>
+        }
+        @if (claimsRelevantes().length) {
+          <table class="claims-table">
+            <tbody>
+              @for (c of claimsRelevantes(); track c.claim) {
+                <tr>
+                  <th>{{ c.claim }}</th>
+                  <td><code>{{ c.valor }}</code></td>
+                </tr>
+              }
+            </tbody>
+          </table>
+          <p class="muted small">Decodificar un JWT no equivale a validarlo: la validación (firma, iss, aud, exp) la hace Spring Security.</p>
+        }
+      </div>
+    </div>
+
+    <div class="security-card">
+      <div class="matrix-header">
+        <h2 class="card-title">Matriz 200 / 401 / 403</h2>
+        <button type="button" class="btn btn-primary btn-sm" (click)="ejecutarTodos()" [disabled]="ejecutando() !== null">
+          Ejecutar todos
+        </button>
+      </div>
+      <div class="matrix-scroll">
+        <table class="matrix-table">
+          <thead>
+            <tr>
+              <th>Escenario</th>
+              <th>Request</th>
+              <th>Credenciales</th>
+              <th>Esperado</th>
+              <th>Observado</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (e of escenarios; track e.id) {
+              <tr>
+                <td>
+                  <strong>{{ e.titulo }}</strong>
+                  <div class="muted small">{{ e.demuestra }}</div>
+                </td>
+                <td><code>{{ e.metodo }} {{ e.ruta }}</code></td>
+                <td>
+                  @switch (e.credencial) {
+                    @case ('sin-token') { <span class="tag">sin token</span> }
+                    @case ('token-invalido') { <span class="tag tag-warn">Bearer inválido</span> }
+                    @default { <span class="tag tag-ok">Bearer válido</span> }
+                  }
+                </td>
+                <td>{{ e.esperado }}</td>
+                <td>
+                  @if (resultado(e.id); as r) {
+                    <span class="status-pill" [class]="'status-pill ' + claseStatus(r.status)">HTTP {{ r.status }}</span>
+                    <span class="muted small">{{ r.ms }} ms</span>
+                    <details class="respuesta">
+                      <summary>respuesta</summary>
+                      <pre>{{ r.cuerpo }}</pre>
+                    </details>
+                  } @else {
+                    <span class="muted">—</span>
+                  }
+                </td>
+                <td>
+                  <button
+                    type="button"
+                    class="btn btn-outline btn-sm"
+                    [disabled]="ejecutando() !== null || (e.credencial === 'token' && !auth.isAuthenticated())"
+                    (click)="ejecutar(e)"
+                  >
+                    {{ ejecutando() === e.id ? '…' : 'Probar' }}
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+      <p class="muted small">
+        401 = la API no pudo autenticar la solicitud (sin token, firma, issuer, audience o expiración).
+        403 = el token es válido pero no posee el scope o rol requerido.
+      </p>
+    </div>
+  </div>
+</section>
