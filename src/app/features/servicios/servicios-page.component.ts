@@ -1,6 +1,6 @@
 import { Component, computed, inject, input } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ServiciosApi } from '../../core/api/servicios.api';
 import { CategoriasApi } from '../../core/api/categorias.api';
 import { ProfesionalesApi } from '../../core/api/profesionales.api';
@@ -26,6 +26,7 @@ export class ServiciosPageComponent {
   private readonly serviciosApi = inject(ServiciosApi);
   private readonly categoriasApi = inject(CategoriasApi);
   private readonly profesionalesApi = inject(ProfesionalesApi);
+  private readonly router = inject(Router);
 
   protected readonly categoriaId = input<number | null>(undefined, {
     alias: 'categoria',
@@ -104,7 +105,8 @@ export class ServiciosPageComponent {
     () => this.servicios.error() || this.categorias.error() || this.profesionales.error(),
   );
 
+  /** Contactar abre el perfil con datos de contacto: zona protegida (requiere sesion). */
   protected onContactar(servicio: Servicio): void {
-    console.log('Contactando con el servicio:', servicio.nombre);
+    void this.router.navigate(['/mi-perfil'], { queryParams: { id: servicio.trabajadorId } });
   }
 }

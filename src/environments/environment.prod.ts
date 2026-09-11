@@ -1,4 +1,6 @@
 export const environment = {
-  useMocks: false,
   production: true,
+  useMocks: false,
+  configUrl: 'config.json',
+  apiBaseUrl: '',
 };

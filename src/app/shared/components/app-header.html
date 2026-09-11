@@ -16,6 +16,20 @@
           {{ item.label }}
         </a>
       }
+      @if (auth.enabled) {
+        @if (auth.isAuthenticated()) {
+          <span class="nav-user" [title]="auth.username()">{{ auth.displayName() }}</span>
+          <button type="button" class="btn btn-outline btn-sm nav-auth-btn" (click)="logout()">
+            Cerrar sesión
+          </button>
+        } @else {
+          <button type="button" class="btn btn-primary btn-sm nav-auth-btn" (click)="login()">
+            Iniciar sesión
+          </button>
+        }
+      } @else {
+        <span class="nav-user nav-user-muted" title="config.json sin clientId/tenantId">IDaaS no configurado</span>
+      }
     </nav>
     <button
       class="menu-toggle"

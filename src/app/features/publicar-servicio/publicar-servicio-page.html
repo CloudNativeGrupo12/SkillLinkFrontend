@@ -12,15 +12,30 @@
   </section>
 }
 
-<form [formRoot]="servicioForm" (ngSubmit)="publicar()" class="publish-form">
+<form [formRoot]="servicioForm" (submit)="publicar()" class="publish-form">
   <div class="container publish-container">
     <div class="publish-header">
       <h1>Publicar un Servicio</h1>
       <p>Completa los datos para ofrecer tu servicio a la comunidad.</p>
     </div>
 
+    @if (auth.enabled && !auth.isAuthenticated()) {
+      <div class="alert-error">
+        Publicar requiere iniciar sesión: la API exige un Access Token con el scope de escritura.
+        <button type="button" class="btn btn-primary btn-sm" (click)="auth.login()">Iniciar sesión</button>
+      </div>
+    }
+
     @if (error()) {
-      <div class="alert-error">{{ error() }}</div>
+      <div class="alert-error">
+        {{ error() }}
+        @if (errorApi()?.tipo === 'no-autenticado' && auth.enabled) {
+          <button type="button" class="btn btn-primary btn-sm" (click)="auth.login()">Iniciar sesión</button>
+        }
+        @if (errorApi()?.tipo === 'sin-permiso') {
+          <div class="muted-note">Tu sesión es válida pero el token no incluye el scope de escritura (403 Forbidden).</div>
+        }
+      </div>
     }
 
     @if (!publicado()) {

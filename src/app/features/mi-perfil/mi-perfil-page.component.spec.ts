@@ -12,6 +12,7 @@ import { Perfil, CurrentUser } from '../../core/models/perfil.model';
 import { Certificacion } from '../../core/models/certificacion.model';
 import { Servicio, CreateServicioDto } from '../../core/models/servicio.model';
 import { Categoria } from '../../core/models/categoria.model';
+import { APP_CONFIG, DEFAULT_APP_CONFIG } from '../../core/config/app-config';
 
 const categorias: Categoria[] = [
   { id: 1, nombre: 'Fitness', descripcion: 'Entrenadores', icono: '<svg></svg>', servicios: 45 },
@@ -118,6 +119,7 @@ describe('MiPerfilPageComponent', () => {
       imports: [MiPerfilPageComponent],
       providers: [
         provideRouter([]),
+        { provide: APP_CONFIG, useValue: DEFAULT_APP_CONFIG },
         { provide: ProfesionalesApi, useClass: ProfesionalesApiStub },
         { provide: PerfilesApi, useClass: PerfilesApiStub },
         { provide: ServiciosApi, useClass: ServiciosApiStub },

@@ -1,0 +1,8 @@
+{
+  "apiBaseUrl": "http://localhost:8080",
+  "auth": {
+    "clientId": "f459e214-84c8-4ada-bfa0-3855d6ddda74",
+    "tenantId": "72fd0b5a-8a6a-4cff-89f6-bde961f7e250",
+    "apiScope": "api://393a4087-9e4d-41c4-a0ce-1755b1ba0d2f/skilllink.write"
+  }
+}
